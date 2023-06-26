@@ -139,91 +139,96 @@ function getBooks() {
   return data;
 }
 
-function getBook(id) {
-  return data.find((d) => d.id === id);
-}
-
-//Destructuring
-
-const book = getBook(3);
-book;
-
-// const title = book.title;
-// const author = book.author
-
-const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
-  book;
-
-title;
-author;
-console.log(author, title, genres);
-
-// const primaryGenre = genres[0]
-// const secondaryGenre = genres[1]
-
-const [primaryGenre, secondaryGenre, ...otherGenres] = genres;
-//always put it at last. (rest opereator)
-
-console.log(primaryGenre, secondaryGenre, otherGenres);
-
-const newGenres = [...genres, "spic fantasy"];
-newGenres;
-
-const updatedBook = {
-  ...book,
-  //Adding a new property
-  moviePublicationDate: "2001-12-19",
-  //Overwriting an existing property
-  pages: 1210,
-};
-updatedBook;
-
-// function getYear(str) {
-//   return str.split("-")[0];
+// function getBook(id) {
+//   return data.find((d) => d.id === id);
 // }
 
-const getYear = (str) => str.split("-")[0];
+// //Destructuring
 
-console.log(getYear(publicationDate));
+// const book = getBook(3);
+// book;
 
-const summary = `${title}, a ${pages}-page long book, was written by ${author} and published in ${getYear(
-  publicationDate
-)}. The book has ${hasMovieAdaptation ? "" : "not"} been adapted as a movie`;
-summary;
+// // const title = book.title;
+// // const author = book.author
 
-const pagesRange = pages > 1000 ? "over a thousand" : "less than 1000";
-//if the condition is true, second part of the operator will be the result  otherwise third part of the operator will be the result
-pagesRange;
-console.log(`The book has ${pagesRange} pages`);
+// const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
+//   book;
 
-console.log(true && "Some string");
-console.log(false && "Some string");
-console.log(hasMovieAdaptation && "This book has a movie!");
+// title;
+// author;
+// console.log(author, title, genres);
 
-//falsy: 0, '', null, undefined
-console.log("jonas" && "some string");
-console.log(0 && "some string");
+// // const primaryGenre = genres[0]
+// // const secondaryGenre = genres[1]
 
-console.log(true || "Some string");
-console.log(false || "Some string");
+// const [primaryGenre, secondaryGenre, ...otherGenres] = genres;
+// //always put it at last. (rest opereator)
 
-console.log(book.translations.spanish);
+// console.log(primaryGenre, secondaryGenre, otherGenres);
 
-const spanishTranslation = book.translations.spanish || "NOT TRANSLATED";
-spanishTranslation;
+// const newGenres = [...genres, "spic fantasy"];
+// newGenres;
 
-// console.log(book.reviews.librarything.reviewsCount);
-// const countWrong = book.reviews.librarything.reviewsCount || "no data";
-// countWrong;
+// const updatedBook = {
+//   ...book,
+//   //Adding a new property
+//   moviePublicationDate: "2001-12-19",
+//   //Overwriting an existing property
+//   pages: 1210,
+// };
+// updatedBook;
 
-// const count = book.reviews.librarything.reviewsCount ?? "no data";
-// count;
+// // function getYear(str) {
+// //   return str.split("-")[0];
+// // }
 
-function getTotalReviewCount(book) {
-  const goodreads = book.reviews?.goodreads?.reviewsCount;
-  const librarything = book.reviews.librarything?.reviewsCount ?? 0;
-  librarything;
-  return goodreads + librarything;
-}
+// const getYear = (str) => str.split("-")[0];
 
-console.log(getTotalReviewCount(book));
+// console.log(getYear(publicationDate));
+
+// const summary = `${title}, a ${pages}-page long book, was written by ${author} and published in ${getYear(
+//   publicationDate
+// )}. The book has ${hasMovieAdaptation ? "" : "not"} been adapted as a movie`;
+// summary;
+
+// const pagesRange = pages > 1000 ? "over a thousand" : "less than 1000";
+// //if the condition is true, second part of the operator will be the result  otherwise third part of the operator will be the result
+// pagesRange;
+// console.log(`The book has ${pagesRange} pages`);
+
+// console.log(true && "Some string");
+// console.log(false && "Some string");
+// console.log(hasMovieAdaptation && "This book has a movie!");
+
+// //falsy: 0, '', null, undefined
+// console.log("jonas" && "some string");
+// console.log(0 && "some string");
+
+// console.log(true || "Some string");
+// console.log(false || "Some string");
+
+// console.log(book.translations.spanish);
+
+// const spanishTranslation = book.translations.spanish || "NOT TRANSLATED";
+// spanishTranslation;
+
+// // console.log(book.reviews.librarything.reviewsCount);
+// // const countWrong = book.reviews.librarything.reviewsCount || "no data";
+// // countWrong;
+
+// // const count = book.reviews.librarything.reviewsCount ?? "no data";
+// // count;
+
+// function getTotalReviewCount(book) {
+//   const goodreads = book.reviews?.goodreads?.reviewsCount;
+//   const librarything = book.reviews.librarything?.reviewsCount ?? 0;
+//   librarything;
+//   return goodreads + librarything;
+// }
+
+// console.log(getTotalReviewCount(book));
+
+const books = getBooks();
+
+const x = [1, 2, 3, 4, 5].map((el) => el * 2);
+console.log(x);
