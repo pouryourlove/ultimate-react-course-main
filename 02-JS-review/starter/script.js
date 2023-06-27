@@ -219,12 +219,12 @@ function getBooks() {
 // // const count = book.reviews.librarything.reviewsCount ?? "no data";
 // // count;
 
-// function getTotalReviewCount(book) {
-//   const goodreads = book.reviews?.goodreads?.reviewsCount;
-//   const librarything = book.reviews.librarything?.reviewsCount ?? 0;
-//   librarything;
-//   return goodreads + librarything;
-// }
+function getTotalReviewCount(book) {
+  const goodreads = book.reviews?.goodreads?.reviewsCount;
+  const librarything = book.reviews.librarything?.reviewsCount ?? 0;
+  librarything;
+  return goodreads + librarything;
+}
 
 // console.log(getTotalReviewCount(book));
 
@@ -232,3 +232,21 @@ const books = getBooks();
 
 const x = [1, 2, 3, 4, 5].map((el) => el * 2);
 console.log(x);
+
+const titles = books.map((book) => book.title);
+titles;
+
+// const essentialData = books.map((book) => {
+//   return {
+//     title: book.title,
+//     author: book.author,
+//   };
+// });
+
+const essentialData = books.map((book) => ({
+  title: book.title,
+  author: book.author,
+  reviewsCount: getTotalReviewCount(book),
+}));
+
+essentialData;
