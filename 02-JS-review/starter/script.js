@@ -218,7 +218,7 @@ function getBooks() {
 
 // // const count = book.reviews.librarything.reviewsCount ?? "no data";
 // // count;
-
+/*
 function getTotalReviewCount(book) {
   const goodreads = book.reviews?.goodreads?.reviewsCount;
   const librarything = book.reviews.librarything?.reviewsCount ?? 0;
@@ -292,3 +292,26 @@ const booksAfterUpdate = booksAfterDelete.map((book) =>
   book.id === 1 ? { ...book, pages: 1 } : book
 );
 booksAfterUpdate;
+*/
+
+// fetch("https://jsonplaceholder.typicode.com/todos")
+//   .then((res) => res.json())
+//   .then((data) => console.log(data));
+// //fetching the data from this url and it takes time because of http request. in meantime, javascript actually keeps running.
+// //it doesn't wait until the fetch completes, it just moves to the next line of code immediately.
+// //we use asynchronous to make it.
+// console.log("jonas");
+
+async function getTodos() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+  const data = await res.json();
+  console.log(data);
+
+  return data;
+}
+
+const todos = getTodos();
+console.log(todos);
+//await pause the code insice the function and doesn't let it go to the next line
+
+console.log("jonas");
