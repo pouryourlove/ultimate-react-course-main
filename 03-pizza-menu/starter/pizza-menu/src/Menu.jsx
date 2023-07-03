@@ -47,15 +47,24 @@ const pizzaData = [
 
 export default function Menu() {
   const pizzas = pizzaData
+  // const pizzas = []
   const numPizzas = pizzas.length
   return (
     <main className="menu">
       <h2>Our menu</h2>
-      {numPizzas > 0 &&  <ul className="pizzas">
+{/* React fragment lets us group some elements without leaving any trace in the HTML tree, so in the DOM. more than one element inside a piece of jsx */}
+      {numPizzas > 0 ? (
+      <>
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit, illo doloribus blanditiis molestiae repellendus quaerat iste esse obcaecati ut omnis harum commodi placeat veritatis hic, fugit, qui incidunt iure facilis!</p>
+      <ul className="pizzas">
         {pizzaData.map((pizza) => (
           <Pizza pizzaObj={pizza} key={pizza.name} />
-        ))}
-      </ul> }
+          ))}
+      </ul>
+      </>): <p>We're stil lworking on our menu. Please come back later :)</p>
+        
+      
+      }
 
      
 
