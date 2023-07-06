@@ -1,3 +1,5 @@
 
 
-export default function PackingList() {}
+export default function PackingList() {
+    return <div className="list">LIST</div>
+}
