@@ -6,15 +6,14 @@ const initialItems = [
   { id: 3, description: "Charger", quantity: 1, packed: false },
 ];
 
-
-export default function PackingList() {
-    return (
-      <div className="list">
-        <ul>
-          {initialItems.map((item) => (
-            <Item item={item} key={item.id} />
-          ))}
-        </ul>
-      </div>
-    );
+export default function PackingList({ items }) {
+  return (
+    <div className="list">
+      <ul>
+        {items.map((item) => (
+          <Item item={item} key={item.id} />
+        ))}
+      </ul>
+    </div>
+  );
 }
