@@ -1,8 +1,13 @@
+export default function Stats({ items }) {
+  const numItems = items.length;
+  const numPacked = items.filter((item) => item.packed).length;
 
-export default function Stats() {
-    return (
-      <footer className="stats">
-        <em>🤳You have X items on your list, and you already packed (X%)</em>
-      </footer>
-    );
+  return (
+    <footer className="stats">
+      <em>
+        🤳You have {numItems} items on your list, and you already packed{" "}
+        {numPacked}(X%)
+      </em>
+    </footer>
+  );
 }
