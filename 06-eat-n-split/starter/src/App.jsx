@@ -45,10 +45,14 @@ export default function App() {
   //Because that's where we add new friend to the list.
 
   function handleSelection(friend){
-    setSelectedFriend(friend)
+    // setSelectedFriend(friend)
+    setSelectedFriend((cur) => cur && cur.id === friend.id ? null : friend)
+    setShowAddFriend(false)
   }
 
   //this is the function that is called when we click select button
+  //setSelectedFriend(...) so that when we select the same button twice then the value will be null
+  //if we clicked the another friend then the value will be friend.
 
   return (
     <div className="app">
@@ -90,7 +94,7 @@ function FriendsList({ friends, onSelection, selectedFriend }) {
 // we say that we are prop drilling
 
 function Friend({ friend, onSelection, selectedFriend }) {
-  const isSelected = selectedFriend && selectedFriend.id === friend.id;
+  const isSelected = selectedFriend?.id === friend.id;
 
   return (
     <li className={isSelected ? "selected" :""}>
