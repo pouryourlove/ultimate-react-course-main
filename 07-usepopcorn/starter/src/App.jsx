@@ -56,19 +56,21 @@ const average = (arr) =>
 
     return (
       <>
-        <NavBar movies={movies}/>
+        <NavBar movies={movies}>
+          <Logo/>
+          <Search/>
+          <NumResults movies={movies}/>
+        </NavBar>
         <Main movies={movies} />
       </>
     );
   }
 
 
-function NavBar({movies}){
+function NavBar({children}){
   
  return ( <nav className="nav-bar">
-   <Logo/>
-   <Search/>
-   <NumResults movies={movies}/>
+    {children}
    
   </nav>)
 }  
@@ -252,3 +254,6 @@ function WatchedMovie({ movie }) {
   );
 }
 
+//component composition: combining different components using the children prop
+// it creates highly reusable and flexible components 
+// it fixes prop drilling (great for layouts)
