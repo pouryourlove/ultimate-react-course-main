@@ -35,6 +35,7 @@ export default function StarRating({
           <Star
             key={i}
             onRate={() => {
+              setRating(i + 1);
               onSetRating(i + 1);
             }}
             full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
