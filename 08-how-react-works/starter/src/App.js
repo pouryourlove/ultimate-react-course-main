@@ -98,3 +98,18 @@ function DifferentContent() {
     </div>
   );
 }
+
+//component
+//Description of a piece of UI
+//A component is a function that returns react elements(element tree), usually written as JSX
+//Bluepring or Template
+//instances are created when we use components
+//In this code we have 3 instances of Tab
+//instance is actual physical manifestation of a component
+//It has its own state and props and has a lifecycle(can be born,live, and die)
+//and it rueturns react element!
+//JSX is converted to React.createElement() function class
+//A React element is the result of these function calls
+//Information necessary to create DOM elements
+//so this react element inserted to dom and eventually becomes DOM element(HTML)
+//this dom element is the actual visual representation of the component instance in the browser
