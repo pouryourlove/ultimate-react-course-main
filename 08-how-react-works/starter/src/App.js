@@ -113,3 +113,7 @@ function DifferentContent() {
 //Information necessary to create DOM elements
 //so this react element inserted to dom and eventually becomes DOM element(HTML)
 //this dom element is the actual visual representation of the component instance in the browser
+
+//render is trigger(by updating state) -> render phase(react calls component functions and figures out how DOM show be updated) -> commit phase(React actually writes to the DOM,updating, inserting, and deleting elements)-> borwser paint
+//two situations that trigger renders: 1.initial render of the applicaiton 2. state isupdated in one or more component instances(re-render). The render process is triggered for the entire application
+//renders are not triggered immediately, but scheduled for when the JS engine has some free time. There is also batching of multiple setState calls in event handlers
