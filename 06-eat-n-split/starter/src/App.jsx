@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-
 const initialFriends = [
   {
     id: 118836,
@@ -44,32 +43,48 @@ export default function App() {
   //and we pass this handleAddFriend function into FormAddFriend component.
   //Because that's where we add new friend to the list.
 
-  function handleSelection(friend){
+  function handleSelection(friend) {
     // setSelectedFriend(friend)
-    setSelectedFriend((cur) => cur && cur.id === friend.id ? null : friend)
-    setShowAddFriend(false)
+    setSelectedFriend((cur) => (cur && cur.id === friend.id ? null : friend));
+    setShowAddFriend(false);
   }
 
   //this is the function that is called when we click select button
   //setSelectedFriend(...) so that when we select the same button twice then the value will be null
   //if we clicked the another friend then the value will be friend.
 
-  function handleSplitBill(value){
-    setFriends((friends) => friends.map((friend) => friend.id === selectedFriend.id ? {...friend, balance: friend.balance + value} : friend))
-    
-    setSelectedFriend(null)
+  function handleSplitBill(value) {
+    setFriends((friends) =>
+      friends.map((friend) =>
+        friend.id === selectedFriend.id
+          ? { ...friend, balance: friend.balance + value }
+          : friend
+      )
+    );
+
+    setSelectedFriend(null);
   }
 
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList friends={friends} onSelection={handleSelection} selectedFriend={selectedFriend}/>
+        <FriendsList
+          friends={friends}
+          onSelection={handleSelection}
+          selectedFriend={selectedFriend}
+        />
         {showAddFriend && <FormAddFriend onAddFriends={handleAddFriend} />}
         <Button onClick={handleShowAddFriend}>
           {showAddFriend ? "Close" : "Add friend"}
         </Button>
       </div>
-      { selectedFriend && <FormSplitBill selectedFriend={selectedFriend} onSplitBill={handleSplitBill} />}
+      {selectedFriend && (
+        <FormSplitBill
+          selectedFriend={selectedFriend}
+          onSplitBill={handleSplitBill}
+          key={selectedFriend.id}
+        />
+      )}
     </div>
   );
 }
@@ -77,16 +92,24 @@ export default function App() {
 // { selectedFriend && <FormSplitBill />} means only render <FormSplitBill />
 // If selectedFriend evaluates to true. But it's currently null which is falsy value.
 
-
 function Button({ children, onClick }) {
-  return <button className="button" onClick={onClick}>{children}</button>;
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
 }
 
 function FriendsList({ friends, onSelection, selectedFriend }) {
   return (
     <ul>
       {friends.map((friend) => (
-        <Friend friend={friend} key={friend.id} selectedFriend={selectedFriend} onSelection={onSelection}/>
+        <Friend
+          friend={friend}
+          key={friend.id}
+          selectedFriend={selectedFriend}
+          onSelection={onSelection}
+        />
       ))}
     </ul>
   );
@@ -95,7 +118,7 @@ function FriendsList({ friends, onSelection, selectedFriend }) {
 // onSelection prop from App component and we pass it to friend component.
 // becuase we can't directly send props from app to friend
 //same with selectedFriend
-//whenever we have a component that doesn't actually need a prop 
+//whenever we have a component that doesn't actually need a prop
 //but all it does with the prop is to pass it down into one of its children,
 // we say that we are prop drilling
 
@@ -103,7 +126,7 @@ function Friend({ friend, onSelection, selectedFriend }) {
   const isSelected = selectedFriend?.id === friend.id;
 
   return (
-    <li className={isSelected ? "selected" :""}>
+    <li className={isSelected ? "selected" : ""}>
       <img src={friend.image} alt={friend.name} />
       <h3>{friend.name}</h3>
 
@@ -119,7 +142,9 @@ function Friend({ friend, onSelection, selectedFriend }) {
       )}
       {friend.balance === 0 && <p>You and {friend.name} are even</p>}
 
-      <Button onClick={() => onSelection(friend)}>{isSelected ? "Close" : "Select"}</Button>
+      <Button onClick={() => onSelection(friend)}>
+        {isSelected ? "Close" : "Select"}
+      </Button>
     </li>
   );
 }
@@ -144,9 +169,9 @@ function FormAddFriend({ onAddFriends }) {
 
     //we set image like that so that it won't change the picture every time we reload.
 
-     onAddFriends(newFriend); 
-     //instead of console.log we use onAddFriends here. 
-     //because then, newFriend will go to handleAddFriend function as an argument.
+    onAddFriends(newFriend);
+    //instead of console.log we use onAddFriends here.
+    //because then, newFriend will go to handleAddFriend function as an argument.
 
     setName("");
     setImage("https://i.pravatar.cc/48?u=499476");
@@ -184,7 +209,7 @@ function FormSplitBill({ selectedFriend, onSplitBill }) {
     e.preventDefault();
 
     if (!bill || !paidByUser) return;
-    onSplitBill(whoIsPaying === "user" ? paidByFriend : - paidByUser)
+    onSplitBill(whoIsPaying === "user" ? paidByFriend : -paidByUser);
   }
   return (
     <form className="form-split-bill" onSubmit={handleSubmit}>

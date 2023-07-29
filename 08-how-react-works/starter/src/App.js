@@ -39,7 +39,10 @@ function Tabbed({ content }) {
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent
+          item={content.at(activeTab)}
+          key={content.at(activeTab).summary}
+        />
       ) : (
         <DifferentContent />
       )}
@@ -117,3 +120,22 @@ function DifferentContent() {
 //render is trigger(by updating state) -> render phase(react calls component functions and figures out how DOM show be updated) -> commit phase(React actually writes to the DOM,updating, inserting, and deleting elements)-> borwser paint
 //two situations that trigger renders: 1.initial render of the applicaiton 2. state isupdated in one or more component instances(re-render). The render process is triggered for the entire application
 //renders are not triggered immediately, but scheduled for when the JS engine has some free time. There is also batching of multiple setState calls in event handlers
+
+//virtual DOM : tree of all react elements created from all instances in the component tree.
+//rendering a component will cause all of its child components to be rendered as well(no matter if props changed or not) this does not mean that the entire DOM is updated. It's just a virtual DOM that will be recreated.
+//why not update the entire DOM whenver state changes somewhere in the app?
+//1. writing to the DOM is slow 2. usually only a small part of the DOM needs to be updated
+//basically react reuses as much of the existing DOM as possible. HOW? by reconciliation. it decides which DOM elements actually need to be inserted, deleted, or updated, in order to reflect the latest state changes. It is processed by a reconciler and reconciler is the engine of react. reconciler in react is called fiber. when there is an initial rendering, virtual dom is created and then fiber make fiber tree on initial render.
+//Fiber tree : internal tree that has a fiber for each component instance and DOM element. Unlike virtual DOM, fiber tree does not re-created on every render and that's hy it stores current state, props, side effects, used hooks. its work can be done asynchonously. rendering process can be split into chunks, tasks can be prioritised, and work can be paused, reused, or thrown away
+//reconciliation in action
+//in the process of reconciliation, diffing came to place. it compares elements based on their position in the tree. so after reconciliation anddiffing, it has updaed fiber tree and then list of DOM updates(it's a result of the render phase(list of effects))
+
+//commit phase
+//It is a phase where react finally write to the DOM. Rreact looks through list of effects and applies them one by one to the atcual DOM elements. committing is synchronous. DOM is updated in one go, it can't be interrupted. this is necessary so that the DOM never shows partial results, ensuring a consistent UI. after the commit phase completes, the workInProgress fiber tree becomes the current tree for the next render cycle.and then it goes to browser paint and updated UI on the screen. commit phase is conducted by reactDOM
+
+//diffing
+
+//1.same posion, different element
+// react assumes entire sub-tree is no long valid, old components are destoryed and removed from DOM, including state. Tree might be rebuilt if children stayed the same(state is reset)
+//2.same position, same element
+//eleement will be kept(as well as child elements),including state. new props/arrtributes are passed if they changed between renders, sometimes this is not what we want. then we can use the key prop
