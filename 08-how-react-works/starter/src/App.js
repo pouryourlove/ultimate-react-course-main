@@ -139,3 +139,7 @@ function DifferentContent() {
 // react assumes entire sub-tree is no long valid, old components are destoryed and removed from DOM, including state. Tree might be rebuilt if children stayed the same(state is reset)
 //2.same position, same element
 //eleement will be kept(as well as child elements),including state. new props/arrtributes are passed if they changed between renders, sometimes this is not what we want. then we can use the key prop
+
+//renders are not triggered immediately, but scheduled for when the JSengine has some free time. There is also batching of multiple setState calls in event handlers
+//If there are three new states. there will be batched state update and just one render and commit per event handler happens
+//state is stored in the fiber tree during render phase -> at this point, re-render has not happened yet -> therefore, answer still contains current state, not the updated state(stale state) -> updating state in react is asynchronous (updated state variables are not immediately available after setState call, but only after the re-render) even if there is one state, the update is after the re-render, not immediately. if we need to update state based on previous update, we use setState with callback.
