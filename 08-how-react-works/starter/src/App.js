@@ -65,8 +65,30 @@ function TabContent({ item }) {
   const [showDetails, setShowDetails] = useState(true);
   const [likes, setLikes] = useState(0);
 
+  console.log("RENDER");
+  //because of batching we only see one RENDER on the screen
+
   function handleInc() {
-    setLikes(likes + 1);
+    setLikes((likes) => likes + 1);
+  }
+
+  function handleTripleInc() {
+    // setLikes(likes + 1);
+    // setLikes(likes + 1);
+    // setLikes(likes + 1);
+    setLikes((likes) => likes + 1);
+    setLikes((likes) => likes + 1);
+    setLikes((likes) => likes + 1);
+  }
+
+  function handleUndo() {
+    setShowDetails(true);
+    console.log(likes);
+    //state is only updated after the re-rendering so in this console log we get the old state
+  }
+
+  function handleUndoLater() {
+    setTimeout(handleUndo, 2000);
   }
 
   return (
@@ -82,13 +104,13 @@ function TabContent({ item }) {
         <div className="hearts-counter">
           <span>{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handleTripleInc}>+++</button>
         </div>
       </div>
 
       <div className="tab-undo">
-        <button>Undo</button>
-        <button>Undo in 2s</button>
+        <button onClick={handleUndo}>Undo</button>
+        <button onClick={handleUndoLater}>Undo in 2s</button>
       </div>
     </div>
   );
@@ -143,3 +165,8 @@ function DifferentContent() {
 //renders are not triggered immediately, but scheduled for when the JSengine has some free time. There is also batching of multiple setState calls in event handlers
 //If there are three new states. there will be batched state update and just one render and commit per event handler happens
 //state is stored in the fiber tree during render phase -> at this point, re-render has not happened yet -> therefore, answer still contains current state, not the updated state(stale state) -> updating state in react is asynchronous (updated state variables are not immediately available after setState call, but only after the re-render) even if there is one state, the update is after the re-render, not immediately. if we need to update state based on previous update, we use setState with callback.
+
+//as soon as the event fires, a new event object will be created. but it will not be created where the click actually happened. Instead the object will be created at the root of the document.(very top of the tree).from there the event will then travel down the entire tree during the so-called capturing phase. it travels down until it reaches the target element. once the target element has been reached,the event object travels all the way back up the entire tree during the so called bubbling phase.
+//1.during the capturing and bubbling phase, the event really goes through every single child and parent element one by one.2.by default,event handlers listen to events not only on the target element,but alsoduring the bubbling phase.
+//we can prevent bubbling with e.stopPropagation()  - the event handler in a parent element will be excecuted too once the child element event excecuted
+//eent delegation - handling events for multiple elements centrally in one single parent element
