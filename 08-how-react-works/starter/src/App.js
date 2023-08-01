@@ -169,4 +169,6 @@ function DifferentContent() {
 //as soon as the event fires, a new event object will be created. but it will not be created where the click actually happened. Instead the object will be created at the root of the document.(very top of the tree).from there the event will then travel down the entire tree during the so-called capturing phase. it travels down until it reaches the target element. once the target element has been reached,the event object travels all the way back up the entire tree during the so called bubbling phase.
 //1.during the capturing and bubbling phase, the event really goes through every single child and parent element one by one.2.by default,event handlers listen to events not only on the target element,but alsoduring the bubbling phase.
 //we can prevent bubbling with e.stopPropagation()  - the event handler in a parent element will be excecuted too once the child element event excecuted
-//eent delegation - handling events for multiple elements centrally in one single parent element
+//eent delegation - handling events for multiple elements centrally in one single parent element. better for performance and memory, as it needs only one handler function. 
+//React registers all event handlers on the root DOM container. This is where all events are handled. Behind the scenes, React performs event delegation for all events in our applications
+//SyntheticEvent : wrapper around the DOM's native event object
