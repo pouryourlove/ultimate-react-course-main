@@ -257,3 +257,10 @@ function WatchedMovie({ movie }) {
 //component composition: combining different components using the children prop
 // it creates highly reusable and flexible components
 // it fixes prop drilling (great for layouts)
+
+//component lifecycle
+//the different phases that a specific component instance can go through over time.
+//First it's mounted(initial render): component instance is rendered for the first time, Fresh state and props are created
+//second it's re-render state. it happens when state changes and props change, parent re-renders and context changes.this state is optional.
+//third state is unmount: component instance is destoryed and removed. state and props are destroyed
+//=>we can define code to run at these specific points in time (by using useEffect hook)
