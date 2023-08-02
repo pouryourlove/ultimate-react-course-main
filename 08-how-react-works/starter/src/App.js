@@ -172,3 +172,7 @@ function DifferentContent() {
 //eent delegation - handling events for multiple elements centrally in one single parent element. better for performance and memory, as it needs only one handler function. 
 //React registers all event handlers on the root DOM container. This is where all events are handled. Behind the scenes, React performs event delegation for all events in our applications
 //SyntheticEvent : wrapper around the DOM's native event object
+
+//framework(all-in-one-kit): frameworks include everything. in other words, everything you need to build a complete application is included in the framework.downside is you're stuck with the framework's tools and conventions
+//library: you can choose multiple 3rd party libraries to build a complete application. downside is that you need to research, download, learn and stay up-to-date with multiple external libraries
+//react 3rd-party library ecosystem
