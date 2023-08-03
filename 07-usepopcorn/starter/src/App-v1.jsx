@@ -50,17 +50,9 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-  const KEY = "";
-
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
-
-  fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar
-`).then(res=>res.json()).then(data => console.log(data));
-
-//Set state in render logic is not allowed. because it renders nonstop. 
-//But there is a way that makes it possible. it's to use useEffect
 
   return (
     <>
