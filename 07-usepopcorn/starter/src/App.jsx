@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -50,17 +50,23 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-  const KEY = "";
+  const KEY = "f5ed94cb";
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
 
-  fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar
-`).then(res=>res.json()).then(data => console.log(data));
+  useEffect(function(){
+      fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar
+`)
+        .then((res) => res.json())
+        .then((data) => setMovies(data.Search));
+
+  },[])
 
 //Set state in render logic is not allowed. because it renders nonstop. 
 //But there is a way that makes it possible. it's to use useEffect
+//with this useeffect, our effect is only running as the component mounts. now this effect will actually be executed after render. 
 
   return (
     <>
