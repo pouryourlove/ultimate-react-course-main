@@ -55,14 +55,21 @@ const average = (arr) =>
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+  const query = "interstellar";
 
-  useEffect(function(){
-      fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar
+  useEffect( function(){
+     async function fetchMovies(){
+      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
 `)
-        .then((res) => res.json())
-        .then((data) => setMovies(data.Search));
+     const data = await res.json()
+     setMovies(data.Search)
+     console.log(data.Search);
 
-  },[])
+  }
+  fetchMovies()
+  }
+    
+   ,[])
 
 //Set state in render logic is not allowed. because it renders nonstop. 
 //But there is a way that makes it possible. it's to use useEffect
