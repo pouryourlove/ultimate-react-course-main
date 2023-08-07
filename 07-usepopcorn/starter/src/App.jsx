@@ -56,16 +56,28 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false)
-  const query = "interstellar";
+  const [error, setError] = useState('')
+  const query = "sakdfalkds";
 
   useEffect( function(){
      async function fetchMovies(){
-      setIsLoading(true);
+    try {  setIsLoading(true);
       const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
 `)
+
+      if(!res.ok) throw new Error("something went wrong with fetching movies")
      const data = await res.json()
+
+      if (data.Response === 'False') throw new Error("Movie enot found"); 
+
      setMovies(data.Search)
-     setIsLoading(false)
+     
+     } catch(err) {
+        console.error(err.message)
+        setError(err.message)
+     } finally {
+        setIsLoading(false);
+     }
 
   }
   fetchMovies()
@@ -94,14 +106,15 @@ export default function App() {
           }
         /> */}
         <Box>
-          {isLoading? <Loader/> : <MovieList movies={movies} />}
+          {/* {isLoading? <Loader/> : <MovieList movies={movies} />} */}
+          {isLoading && <Loader/>}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error}/>}
         </Box>
-        
+
         <Box>
-         
-            <WatchedSummary watched={watched} />
-            <WatchedMoviesList watched={watched} />
-          
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
         </Box>
       </Main>
     </>
@@ -111,6 +124,12 @@ export default function App() {
 //we made reusable box
 function Loader(){
   return <p className="loader">Loading...</p>
+}
+
+function ErrorMessage({message}){
+  return <p className="error">
+    <span>💔</span>{message}
+  </p>
 }
 
 function NavBar({ children }) {
@@ -290,3 +309,4 @@ function WatchedMovie({ movie }) {
 //second it's re-render state. it happens when state changes and props change, parent re-renders and context changes.this state is optional.
 //third state is unmount: component instance is destoryed and removed. state and props are destroyed
 //=>we can define code to run at these specific points in time (by using useEffect hook)
+
