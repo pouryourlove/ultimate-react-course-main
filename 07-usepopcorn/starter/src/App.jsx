@@ -50,17 +50,17 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-  const KEY = "f5ed94cb";
+const KEY = "f5ed94cb";
 
 export default function App() {
   const [query, setQuery] = useState("inception");
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [selectedId, setSelectedId] = useState(null)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
 
-/*
+  /*
   useEffect(function () {
       console.log("After initial render");
     },[]);
@@ -80,50 +80,53 @@ export default function App() {
   console.log('During render');
 */
 
- function handleSelectMovie(id){
-  setSelectedId(selectedId => id === selectedId ? null : id)
- }
-
- function handleCloseMovie(){
-  setSelectedId(null)
- }
-
-  useEffect( function(){
-     async function fetchMovies(){
-    try {  setIsLoading(true);
-           setError("")
-      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
-`)
-
-      if(!res.ok) throw new Error("something went wrong with fetching movies")
-     const data = await res.json()
-
-      if (data.Response === 'False') throw new Error("Movie enot found"); 
-
-     setMovies(data.Search)
-     
-     } catch(err) {
-        console.error(err.message)
-        setError(err.message)
-     } finally {
-        setIsLoading(false);
-     }
-
-  }
-  if(query.length<3){
-    setMovies([])
-    setError('')
-    return
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
   }
 
-  fetchMovies()
+  function handleCloseMovie() {
+    setSelectedId(null);
   }
-    
-   ,[query])
 
-//Set state in render logic is not allowed. because it renders nonstop. 
-//But there is a way that makes it possible. it's to use useEffect
-//with this useeffect, our effect is only running as the component mounts. now this effect will actually be executed after render. 
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError("");
+          const res =
+            await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
+`);
+
+          if (!res.ok)
+            throw new Error("something went wrong with fetching movies");
+          const data = await res.json();
+
+          if (data.Response === "False") throw new Error("Movie enot found");
+
+          setMovies(data.Search);
+        } catch (err) {
+          console.error(err.message);
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      if (query.length < 3) {
+        setMovies([]);
+        setError("");
+        return;
+      }
+
+      fetchMovies();
+    },
+
+    [query]
+  );
+
+  //Set state in render logic is not allowed. because it renders nonstop.
+  //But there is a way that makes it possible. it's to use useEffect
+  //with this useeffect, our effect is only running as the component mounts. now this effect will actually be executed after render.
 
   return (
     <>
@@ -152,7 +155,10 @@ export default function App() {
 
         <Box>
           {selectedId ? (
-            <MovieDetails selectedId={selectedId} onCloseMovie={handleCloseMovie}/>
+            <MovieDetails
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie}
+            />
           ) : (
             <>
               <WatchedSummary watched={watched} />
@@ -166,14 +172,17 @@ export default function App() {
 }
 
 //we made reusable box
-function Loader(){
-  return <p className="loader">Loading...</p>
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
 
-function ErrorMessage({message}){
-  return <p className="error">
-    <span>💔</span>{message}
-  </p>
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <span>💔</span>
+      {message}
+    </p>
+  );
 }
 
 function NavBar({ children }) {
@@ -202,8 +211,7 @@ function NumResults({ movies }) {
   );
 }
 
-function Search({query, setQuery}) {
- 
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
@@ -223,10 +231,7 @@ function Box({ children }) {
   const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen((open) => !open)}
-      >
+      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? "–" : "+"}
       </button>
       {isOpen && children}
@@ -281,10 +286,50 @@ function Movie({ movie, onSelectMovie }) {
   );
 }
 
-function MovieDetails({selectedId, onCloseMovie}){
-  return <div className="details">
-    <button className="btn-back" onClick={onCloseMovie}>&larr;</button>
-    {selectedId}</div>
+function MovieDetails({ selectedId, onCloseMovie }) {
+  useEffect(function () {
+    const [movie, setMovie] = useState({});
+
+    const {
+      Title: title,
+      Year: year,
+      Poster: poster,
+      Runtime: runtime,
+      imdbRating,
+      Plot: plot,
+      Released: released,
+      Actors: actors,
+      Director: director,
+      Genre: genre,
+    } = movie;
+
+    async function getMovieDetails() {
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+      );
+      const data = await res.json();
+      setMovie(data);
+    }
+    getMovieDetails();
+  }, []);
+
+  return (
+    <div className="details">
+      <header>
+        <button className="btn-back" onClick={onCloseMovie}>
+          &larr;
+        </button>
+        <img src={poster} alt={`Poster of ${movie} movie`} />
+        <div className="details-overview">
+          <h2>{title}</h2>
+          <p>
+            {released} &bull; {runtime}
+          </p>
+        </div>
+      </header>
+      {selectedId}
+    </div>
+  );
 }
 
 function WatchedSummary({ watched }) {
@@ -359,4 +404,3 @@ function WatchedMovie({ movie }) {
 //second it's re-render state. it happens when state changes and props change, parent re-renders and context changes.this state is optional.
 //third state is unmount: component instance is destoryed and removed. state and props are destroyed
 //=>we can define code to run at these specific points in time (by using useEffect hook)
-
