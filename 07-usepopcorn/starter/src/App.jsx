@@ -54,7 +54,7 @@ const average = (arr) =>
 const KEY = "f5ed94cb";
 
 export default function App() {
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,13 +99,17 @@ export default function App() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError("");
-          const res =
-            await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
-`);
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}
+`,
+            { signal: controller.signal }
+          );
 
           if (!res.ok)
             throw new Error("something went wrong with fetching movies");
@@ -114,9 +118,14 @@ export default function App() {
           if (data.Response === "False") throw new Error("Movie enot found");
 
           setMovies(data.Search);
+          setError("");
         } catch (err) {
-          console.error(err.message);
           setError(err.message);
+
+          if (err.name !== "AbortError") {
+            console.log(err.message);
+            setError(err.message);
+          }
         } finally {
           setIsLoading(false);
         }
@@ -127,7 +136,12 @@ export default function App() {
         return;
       }
 
+      handleCloseMovie();
       fetchMovies();
+
+      return function () {
+        controller.abort();
+      };
     },
 
     [query]
@@ -340,6 +354,22 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   useEffect(
     function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
+
+  useEffect(
+    function () {
       async function getMovieDetails() {
         setIsLoading(true);
         const res = await fetch(
@@ -358,6 +388,10 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     function () {
       if (!title) return;
       document.title = `Movie | ${title}`;
+
+      return function () {
+        document.title = "usePopcorn";
+      };
     },
     [title]
   );
@@ -498,3 +532,8 @@ function WatchedMovie({ movie, onDeleteWatched }) {
 //second it's re-render state. it happens when state changes and props change, parent re-renders and context changes.this state is optional.
 //third state is unmount: component instance is destoryed and removed. state and props are destroyed
 //=>we can define code to run at these specific points in time (by using useEffect hook)
+
+//useeffect cleanup function
+//function that we can return from an effect 1.before the effect is executed again. 2. after a component has unmounted
+//component renders => execute effect if dependency array includes updated data
+//component unmounts => execute cleanup function
