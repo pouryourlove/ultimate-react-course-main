@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 
 const tempMovieData = [
@@ -64,6 +64,8 @@ export default function App() {
     const storeValue = localStorage.getItem("watched");
     return JSON.parse(storeValue);
   });
+
+  // function must be pure and accept no arguments. called only on initial render.
 
   /*
   useEffect(function () {
@@ -253,6 +255,18 @@ function NumResults({ movies }) {
 }
 
 function Search({ query, setQuery }) {
+  const inputEl = useRef(null);
+
+  useEffect(function () {
+    function callback(e) {
+      if (e.code === "Enter") {
+        inputEl.current.focus();
+      }
+    }
+    document.addEventListener("keydown", callback);
+    return () => document.removeEventListener("keydown", callback);
+  }, []);
+
   return (
     <input
       className="search"
@@ -260,6 +274,7 @@ function Search({ query, setQuery }) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={inputEl}
     />
   );
 }
