@@ -52,7 +52,7 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const KEY = "f5ed94cb";
+const KEY = import.meta.env.VITE_REACT_APP_MOVIE_API_KEY;
 
 export default function App() {
   const [query, setQuery] = useState("");
