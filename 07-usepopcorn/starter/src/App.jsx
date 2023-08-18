@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
 
 const tempMovieData = [
   {
@@ -63,10 +64,12 @@ export default function App() {
 
   const { movies, isLoading, error } = useMovies(query);
 
-  const [watched, setWatched] = useState(function () {
-    const storeValue = localStorage.getItem("watched");
-    return JSON.parse(storeValue);
-  });
+  const [watched, setWatched] = useLocalStorageState([]);
+
+  // const [watched, setWatched] = useState(function () {
+  //   const storeValue = localStorage.getItem("watched");
+  //   return JSON.parse(storeValue);
+  // });
 
   // function must be pure and accept no arguments. called only on initial render.
 
@@ -107,13 +110,6 @@ export default function App() {
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
-
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
 
   //Set state in render logic is not allowed. because it renders nonstop.
   //But there is a way that makes it possible. it's to use useEffect
